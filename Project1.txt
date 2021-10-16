@@ -1,0 +1,452 @@
+#include <conio.h>
+#include <iostream>
+#include <Windows.h>
+using namespace std;
+void game(); // головна функція(рекрусивна), що відповідає за процес гри
+int in(); // функція відповідає за збір інформації
+int catagory(); // функція для перегляду катагорії і її вибору
+void books(); //функція для вікторини з книгами
+void music(); //функція для вікторини з музикою
+void sport(); //функція для вікторини з спортом
+void science(); //функція для вікторини з науки
+char answers(); //функція для зчитування відповідей+таймер
+int sco(int score, char a, char b, int c); //функція для рахунку та перевірки відповідей 
+int sco(int score, char a, char b, int c); //функція для рахунку та перевірки відповідей 
+void clear(int len); //функція для очищення екрану
+void change(int colour); //функція для зміни кольору
+void load();//функція, що відповідає за анімацію завантаження
+void show();//функція, що відповідає за привітання гравця 
+const int BLUE = 1;//глобальна зміна для синього кольору
+const int YELLOW = 6;//глобальна зміна для жовтого кольору
+const int RED = 4;//глобальна зміна для червоного кольору
+const int WHITE = 15;//глобальна зміна для білогого кольору
+
+int main()
+{
+	load();
+	show();
+	cout << "\n\nPleas read the rules :) Don't ignoring this \n\n";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+	cout << "----------------------------------------\n";
+	cout << "                 Rules	                 \n";
+	cout << "----------------------------------------\n";
+	cout << "On the screen appear some question related to literature, science, sport and music and some answer options \n";
+	cout << "You have to choose ONE correct variant \n";
+	game();
+}
+
+void clear(int characterLength) {
+	for (int i = 0; i < characterLength; i++) {
+		cout << "\b";
+	}
+}
+void change(int colour) {
+	HANDLE hConsole;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, colour);
+}
+void load() {
+	int i;
+	string closed = "- - -", open = "* * *";
+	int colour[] = { RED, YELLOW, BLUE };
+
+	cout << closed;
+
+	for (i = 0; i < 3; i++) {
+		Sleep(1000);
+
+		clear(5);
+		change(colour[i]);
+
+		cout << open;
+
+		Sleep(1000);
+
+		clear(5);
+		change(WHITE);
+
+		cout << closed;
+	}
+
+	clear(5);
+	change(WHITE);
+}
+void show() {
+	change(RED);
+	cout << "Hi ";
+	Sleep(1000);
+
+	change(YELLOW);
+	cout << "There ";
+	Sleep(1000);
+
+	change(BLUE);
+	cout << "Gamer!";
+	Sleep(1000);
+
+	change(WHITE);
+}
+void game() {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BLUE);
+	cout << "\nDo you want to play?\n";
+	cout << "If yes enter 1, in other varient enter 0\n\nEnter: ";
+	int choice = in(); // отримуємо вибір користувача
+	if (choice == 1) {
+		choice = catagory();
+		if (choice == 1) {
+			cout << "\nOkay) You chose books quiz, let's play\n";
+			books();
+		}
+		else if (choice == 2) {
+			cout << "\nOkay) You chose music quiz, let's play\n";
+			music();
+		}
+		else if (choice == 3) {
+			cout << "\nOkay) You chose sport quiz, let's play\n";
+			sport();
+		}
+		else if (choice == 4) {
+			cout << "\nOkay) You chose science quiz, let's play\n";
+			science();
+		}
+		cout << "Game finished!\n\n"; // Кінець вікторини
+		game();
+	}
+	else  cout << "Okay) Thanks for your time, hope to see you again, goodbye!\n"; //Кінець гри 
+}
+inline int sco(int score, char a, char b, int c) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+	if (b == a) {
+		cout << "\n Correct) \n\n";
+		score += c;
+	}
+	else if (a == 1) cout << "\nFailed...\n\n";
+	else cout << "\nNot right... \n\n";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
+	return score;
+}
+int in() {
+	int i;
+	cin >> i;
+	return i;
+
+}
+int catagory() {
+	cout << "\nOkay) We moved to catagory choice\n";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+	cout << "-------------------------------------------\n";
+	cout << "|" << char(3) << "books(1) " << char(4) << "music(2) " << char(5) << "science(3) " << char(6) << "sport(4)|\n"; // показуємо категорії
+	cout << "-------------------------------------------\n\n";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
+	cout << "Enter: ";
+	int choice = in(); // отримуємо вибір користувача
+	return choice;
+}
+char answers()
+{
+	char a; int i = 0;
+	cout << "\n";
+	while (i < 61)
+	{
+		cout << "Sec:  " << i << "  Enter: ";
+		Sleep(1000);
+		clear(17);
+		i++;
+		if (_kbhit()) {
+			cout << "Your input is:  ";
+			cin >> a;
+			cout << "You answered this question after " << i << " sec)\n";
+			break;
+		}
+	}
+	if (i == 61) {
+		a = 1;
+		clear(17);
+	}
+	return a;
+}
+
+void books()
+{
+
+	cout << "Hey, you have chosen questions related with books and writers. Good luck :) \n\n";
+
+	int score = 0;
+	cout << "What is Shakespeare's most famous poem? \n";
+	cout << "A) Sonet 1 \n";
+	cout << "B) Sonnet 116 \n";
+	cout << "C) Sonnet 18\n"; //true
+	cout << "D) Sonnet 29 \n";
+	char a = answers();
+	score = sco(score, a, 'C', 2);
+	cout << " What is the #1 best selling book? \n";
+	cout << "A) Harry Poter \n"; // true
+	cout << "B) Da Vinci Code\n";
+	cout << "C) Fity Shades of Grey \n";
+	cout << "D) Angels and Demon \n";
+	a = answers();
+	score = sco(score, a, 'A', 1);
+	cout << "What is the best non fiction book ever written? \n";
+	cout << "A) Endurance \n";
+	cout << "B) Essays by Michel de Montaigne \n"; // true
+	cout << "C) Night \n";
+	cout << "D) Right Stuff \n";
+	a = answers();
+	score = sco(score, a, 'B', 3);
+	cout << "Which is the holiest book in the world? \n";
+	cout << "A) The Holy Quaran or Koran \n";
+	cout << "B) The Holy Bible \n";// true
+	cout << "C) The Four Books \n";
+	cout << "D) The Tripitaka\n";
+	a = answers();
+	score = sco(score, a, 'B', 1);
+	cout << "What are the top 5 most read books in the world? \n";
+	cout << "A)The Bible. Quotations From Chairman Mao. Harry Potter Series. The Lord of the Rings. The Alchemist.\n"; // true
+	cout << "B)The Bible. The Da Vinci Code. The Alchaemist. Harry Potter Series. The Lord of the Rings\n";
+	cout << "C) Gone With the Wind. The Diary of a Young Girl. Think and Grow Rich. The Twilight Saga. Harry Potter Series \n";
+	cout << "D) The Bible. The Alchemist. Harry Potter Series. Gone With the Wind. Quotations From Chairman Mao. \n";
+	a = answers();
+	score = sco(score, a, 'A', 2);
+	cout << "Which author’s 1981 bestseller apparently “predicted” the pandemic with its plot device of a Wuhan-virus? \n";
+	cout << "A) Michael Crichton \n";
+	cout << "B) Stephen King \n";
+	cout << "C) Colleen McCullough \n";
+	cout << "D) Dean Koontz \n"; // true
+	a = answers();
+	score = sco(score, a, 'D', 3);
+	cout << "2020 marked 50 years since the publication of Len Deighton’s novel Bomber. Was it the first: \n";
+	cout << "A) Old paper\n";
+	cout << "B) Text inscriptions on drawings \n";
+	cout << "C) Wrriten on a word processor \n";// true
+	cout << "D) new paper \n";
+	a = answers();
+	score = sco(score, a, 'C', 3);
+	cout << "CANDICE CARTY-WILLIAMS ASKS: If Adenuga, the mother of JME, Skepta and Julie Adenuga, this year had a memoir published, titled Endless \n";
+	cout << "A) Fortune \n"; //true
+	cout << "B) Love \n";
+	cout << "C) Money \n";
+	cout << "D) Will \n";
+	a = answers();
+	score = sco(score, a, 'A', 1);
+	cout << "PLAGUES IN LITERATURE: How old was Daniel Defoe during the London plague that he depicted in A Journal of a Plague Year? \n";
+	cout << "A) first \n";
+	cout << "B) four \n";
+	cout << "C) five \n";//true
+	cout << "D) three \n";
+	a = answers();
+	score = sco(score, a, 'C', 2);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+	cout << "Well done) Your score is: " << score << "\n";
+}
+void music()
+{
+	int score = 0;
+	cout << "Hey, you have chosen questions related with music and singers. Good luck :) \n\n";
+	cout << "1) Who recorded the latest James Bond theme for as-yet-unreleased 'No Time to Die'? \n";
+	cout << "A) Joker \n";
+	cout << "B) Jojo Rabbit \n";
+	cout << "C) Bille Eilish \n";// true
+	cout << "D) James Bond \n";
+	char a = answers();
+	score = sco(score, a, 'C', 3);
+	cout << "2) Who were the three headliners of Glastonbury 2019? \n";
+	cout << "A) The Charlatans, Circa Waves, Babymetal\n";
+	cout << "B) Mac DeMarco, Dave, Slaves \n";
+	cout << "C) The Jonny Marr, Sigrid, Bille Eilish \n";
+	cout << "D) The Cure, The Killers і Stormzy \n";// true
+	a = answers();
+	score = sco(score, a, 'D', 2);
+	cout << "3) What is the highest-selling album of all time? (worldwide) \n";
+	cout << "A) Rumours - Fleetwood \n";
+	cout << "B) Thriller - Michael Jackson \n";// true
+	cout << "C) Back in Black - AC/DC \n";
+	cout << "D) Their Greatest Hits 1971–1975 - Eagles\n";
+	a = answers();
+	score = sco(score, a, 'B', 2);
+	cout << "4) Who is the only musician ever to have been awarded the Nobel prize for literature? \n";
+	cout << "A) Nick Cave \n";
+	cout << "B) Phil Ochs\n";
+	cout << "C) Nina Simone \n";
+	cout << "D) Bob Dylan \n";// true
+	a = answers();
+	score = sco(score, a, 'D', 2);
+	cout << "5) Which unlikely part-time musician beat Zayn Malik and Blossoms to win the highest-selling debut album of 2016? \n";
+	cout << "A) Blossoms \n";
+	cout << "B) ZaynMalik \n";
+	cout << "C) Nao \n";
+	cout << "D) Bradley Walsh \n";// true
+	a = answers();
+	score = sco(score, a, 'D', 3);
+	cout << "6) Which artist has the record for the highest grossing tour of all time (not adjusted for inflation)? \n";
+	cout << "A) David Bowie \n";
+	cout << "B) Pink Floyd \n";
+	cout << "C) Ed Sheeran \n"; // ture
+	cout << "D) The Jacksons \n";
+	score = sco(score, a, 'C', 2);
+	cout << "7) In what year was the first Woodstock festival held? \n";
+	cout << "A) 1970 \n";
+	cout << "B) 1969 \n";// true
+	cout << "C) 1955 up with \n";
+	cout << "D) 1980 \n";
+	a = answers();
+	score = sco(score, a, 'B', 1);
+	cout << "8) What is David Bowie’s real name? \n";
+	cout << "A) David Ivans \n";
+	cout << "B) David Jones \n";// true
+	cout << "C) David Bowie \n";
+	cout << "D) David Antonio\n";
+	a = answers();
+	score = sco(score, a, 'B', 1);
+	cout << "9) Who was the first female artist to achieve a UK number one with a self-written song? \n";
+	cout << "A) Dua Lipa \n";
+	cout << "B) Bill Haley \n";
+	cout << "C) Kate Bush \n";// true
+	cout << "D) Roy Orbison \n";
+	a = answers();
+	score = sco(score, a, 'C', 3);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+	cout << "Well done) Your score is: " << score << "\n";
+}
+void science()
+{
+	int score = 0;
+	cout << "Hey, you have chosen questions related with science and invention. Good luck :) \n\n";
+
+	cout << "Which of the following is not emitted by radioactive substance? \n";
+	cout << "A) Electrons \n";
+	cout << "B) Electromagnetic radiations \n";
+	cout << "C) Alpha particles \n";
+	cout << "D) Neutrons \n"; // true
+	char a = answers();
+	score = sco(score, a, 'D', 1);
+	cout << "What make the metals are good conductors of electricity? \n";
+	cout << "A) Because they contain free electrons \n"; // true
+	cout << "B) Because the atoms are lightly packed \n";
+	cout << "C) Because they have high melting point \n";
+	cout << "D) All of the above \n";
+	a = answers();
+	score = sco(score, a, 'A', 1);
+	cout << "Who had propounded the planetary laws? \n";
+	cout << "A) Isaac Newton \n";
+	cout << "B) Johannes Kepler \n"; // true
+	cout << "C) Galileo Galilei \n";
+	cout << "D) Nicolaus Copernicus \n";
+	a = answers();
+	score = sco(score, a, 'B', 2);
+	cout << "The planet whose density is less than water and on keeping in the water it will start to float: \n";
+	cout << "A) Mercury \n";
+	cout << "B) Venus \n";
+	cout << "C) Saturn \n"; // true
+	cout << "D) Mars \n";
+	a = answers();
+	score = sco(score, a, 'C', 2);
+	cout << "The planet Neptune was discovered by: \n";
+	cout << "A) Johann Gottfried Galle \n"; //true
+	cout << "B) Galileo Galilei \n";
+	cout << "C) Johannes Kepler \n";
+	cout << "D) Isaac Newton \n";
+	a = answers();
+	score = sco(score, a, 'A', 3);
+	cout << "Rheostat is the other name of: \n";
+	cout << "A) Fixed resistance \n";
+	cout << "B) Variable resistance \n"; //true
+	cout << "C) Insulator \n";
+	cout << "D) Conductor \n";
+	a = answers();
+	score = sco(score, a, 'B', 2);
+	cout << "What is the formula for calculating current? \n";
+	cout << "A) I = V * R \n";
+	cout << "B) I = V + R \n";
+	cout << "C) I = V – R \n";
+	cout << "D) I = V/R \n"; //true
+	a = answers();
+	score = sco(score, a, 'D', 2);
+	cout << "What is the SI unit of resistance? \n";
+	cout << "A) Volt \n";
+	cout << "B) Watt \n";
+	cout << "C) Ohm \n"; //true
+	cout << "D) Metre \n";
+	a = answers();
+	score = sco(score, a, 'C', 1);
+	cout << "Specify a particle with mass and charge equal to zero. \n";
+	cout << "A) Photon \n"; //true
+	cout << "B) Proton \n";
+	cout << "C) Neutron \n";
+	cout << "D) Electron \n";
+	a = answers();
+	score = sco(score, a, 'A', 3);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+	cout << "Well done) Your score is: " << score << "\n";
+}
+void sport() {
+	int score = 0;
+	cout << "Hey, you have chosen questions related with sport and sportsman. Good luck :) \n\n";
+
+	cout << "What is the name of person which controls a football match? \n";
+	cout << "A) A referee  \n";// true
+	cout << "B) An Umpire \n";
+	cout << "C) A spectator \n";
+	cout << "D) A goalkeeper \n";
+	char a = answers();
+	score = sco(score, a, 'A', 1);
+	cout << "What are the five colours of the Olympic rings? \n";
+	cout << "A) Blue, yellow, black, green and red  \n";// true
+	cout << "B) Blue, purple, orange, green and red \n";
+	cout << "C) Blue, turquoise, purple, red and orange \n";
+	cout << "D) Blue, pink, turquoise, purple and red \n";
+	a = answers();
+	score = sco(score, a, 'A', 1);
+	cout << "The National Game of Japan is \n";
+	cout << "A) Tennis \n";
+	cout << "B) Karate  \n";
+	cout << "C) Ice Hockey \n";
+	cout << "D) Sumo wrestling \n";// true
+	a = answers();
+	score = sco(score, a, 'D', 1);
+	cout << "The term ' Gambit ' is associated with: \n";
+	cout << "A) Chess  \n";// true
+	cout << "B) Tennis \n";
+	cout << "C) Basket ball \n";
+	cout << "D) Baseball \n";
+	a = answers();
+	score = sco(score, a, 'A', 2);
+	cout << "Term Chinaman is related to which sports ? \n";
+	cout << "A) Football \n";
+	cout << "B) Hockey \n";
+	cout << "C) Golf \n";
+	cout << "D) Cricket \n";// true
+	a = answers();
+	score = sco(score, a, 'D', 2);
+	cout << "How many total minutes of action are there in an average baseball game? \n";
+	cout << "A) 16 minutes \n";
+	cout << "B) 15 minutes \n";
+	cout << "C) 18 minutes \n";// true
+	cout << "D) 17 minutes \n";
+	a = answers();
+	score = sco(score, a, 'C', 2);
+	cout << "Double fault is associated with which game \n";
+	cout << "A) Golf \n";
+	cout << "B) Tennis  \n";// true
+	cout << "C) Chess \n";
+	cout << "D) Football \n";
+	a = answers();
+	score = sco(score, a, 'B', 3);
+	cout << "In which year did Maradona score a goal with his hand? \n";
+	cout << "A) 1986 \n";// true
+	cout << "B) 1991 \n";
+	cout << "C) 1985 \n";
+	cout << "D) 1989 \n";
+	a = answers();
+	score = sco(score, a, 'A', 3);
+	cout << "When did Kobe Bryant die? \n";
+	cout << "A) 26 January 2020 \n";// true
+	cout << "B) 28 January 2020 \n";
+	cout << "C) 27 January 2020 \n";
+	cout << "D) 25 January 2020 \n";
+	a = answers();
+	score = sco(score, a, 'A', 3);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+	cout << "Well done) Your score is: " << score << "\n";
+}
+	
